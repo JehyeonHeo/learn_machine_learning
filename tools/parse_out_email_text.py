@@ -36,13 +36,15 @@ def parseOutText(f):
         stemmer = SnowballStemmer("english")
         string_nl_delimited = text_string.replace('\n', ' ')
         string_nl_tab_delimited = string_nl_delimited.replace('\t', ' ')
+        #string_nl_tab_cr_delimited = string_nl_tab_delimited.replace('\r', ' ')
         while '  ' in string_nl_tab_delimited:
             string_nl_tab_delimited = string_nl_tab_delimited.replace('  ', ' ')
-        splited_string = string_nl_tab_delimited.split(' ')
+        splited_string = string_nl_tab_delimited.strip().split(' ')
         stemed_words = []
         for word in splited_string:
-            stemed_word = stemmer.stem(word)
-            stemed_words.append(stemed_word)
+            if word != '' or word != ' ':
+                stemed_word = stemmer.stem(word.strip())
+                stemed_words.append(stemed_word)
             
         words = ' '.join(stemed_words)
 
