@@ -61,7 +61,9 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 
-sss = StratifiedShuffleSplit(n_splits = 100, test_size = 0.3, random_state = 42)
+#In the document, I designated n_splits as 100. 
+#But in here I designated it as 5 because tester.ipynb does 1000 folds cross-validation.
+sss = StratifiedShuffleSplit(n_splits = 5, test_size = 0.3, random_state = 42)
 scoring = {'accuracy' : make_scorer(accuracy_score), 
            'precision' : make_scorer(precision_score),
            'recall' : make_scorer(recall_score)}
