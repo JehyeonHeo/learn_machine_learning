@@ -10,7 +10,7 @@ from tester import dump_classifier_and_data
 ### Task 1: Select what features you'll use.
 ### features_list is a list of strings, each of which is a feature name.
 ### The first feature must be "poi".
-features_list = ['poi','bonus', 'exercised_stock_options'] # You will need to use more features
+features_list = ['poi','expenses', 'exercised_stock_options', 'bonus'] # You will need to use more features
 
 ### Load the dictionary containing the dataset
 with open("final_project_dataset.pkl", "r") as data_file:
@@ -18,6 +18,7 @@ with open("final_project_dataset.pkl", "r") as data_file:
 
 ### Task 2: Remove outliers
 data_dict.pop('TOTAL', 0)
+data_dict.pop('THE TRAVEL AGENCY IN THE PARK', 0)
 
 ### Task 3: Create new feature(s)
 for name, data in data_dict.iteritems():
@@ -43,7 +44,7 @@ labels, features = targetFeatureSplit(data)
 
 # Provided to give you a starting point. Try a variety of classifiers.
 from sklearn.tree import DecisionTreeClassifier
-dtClf = DecisionTreeClassifier()
+dtClf = DecisionTreeClassifier(random_state = 42)
 
 ### Task 5: Tune your classifier to achieve better than .3 precision and recall 
 ### using our testing script. Check the tester.py script in the final project
@@ -53,13 +54,20 @@ dtClf = DecisionTreeClassifier()
 ### http://scikit-learn.org/stable/modules/generated/sklearn.cross_validation.StratifiedShuffleSplit.html
 
 # Example starting point. Try investigating other evaluation techniques!
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import make_scorer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
 
-feature_train, feature_test, label_train, label_test = train_test_split(features, labels, test_size = 0.3, random_state = 42)
-
+sss = StratifiedShuffleSplit(n_splits = 100, test_size = 0.3, random_state = 42)
+scoring = {'accuracy' : make_scorer(accuracy_score), 
+           'precision' : make_scorer(precision_score),
+           'recall' : make_scorer(recall_score)}
 dt_parameters = {'min_samples_split' : [2, 5, 10, 15], 'criterion' : ['gini', 'entropy']}
-clf = GridSearchCV(dtClf, dt_parameters)
+
+clf = GridSearchCV(dtClf, dt_parameters, cv = sss, scoring = scoring, refit = 'recall')
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
