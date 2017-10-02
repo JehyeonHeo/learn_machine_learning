@@ -57,19 +57,17 @@ dtClf = DecisionTreeClassifier(random_state = 42)
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 
 #In the document, I designated n_splits as 100. 
 #But in here I designated it as 5 because tester.ipynb does 1000 folds cross-validation.
+#And I changed scoring parameter to scorer for recall_score, not dictionary. 
+#Because I can use multiple evaluation metrics only when sklearn version is 0.19.0 or more.
 sss = StratifiedShuffleSplit(n_splits = 5, test_size = 0.3, random_state = 42)
-scoring = {'accuracy' : make_scorer(accuracy_score), 
-           'precision' : make_scorer(precision_score),
-           'recall' : make_scorer(recall_score)}
+recall_scoring = make_scorer(recall_score)
 dt_parameters = {'min_samples_split' : [2, 5, 10, 15], 'criterion' : ['gini', 'entropy']}
 
-clf = GridSearchCV(dtClf, dt_parameters, cv = sss, scoring = scoring, refit = 'recall')
+clf = GridSearchCV(dtClf, dt_parameters, cv = sss, scoring = recall_scoring)
 
 ### Task 6: Dump your classifier, dataset, and features_list so anyone can
 ### check your results. You do not need to change anything below, but make sure
