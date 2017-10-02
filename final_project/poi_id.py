@@ -19,6 +19,7 @@ with open("final_project_dataset.pkl", "r") as data_file:
 ### Task 2: Remove outliers
 data_dict.pop('TOTAL', 0)
 data_dict.pop('THE TRAVEL AGENCY IN THE PARK', 0)
+data_dict.pop('LOCKHART EUGENE E', 0)
 
 ### Task 3: Create new feature(s)
 for name, data in data_dict.iteritems():
