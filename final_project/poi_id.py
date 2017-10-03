@@ -61,7 +61,7 @@ from sklearn.metrics import make_scorer
 from sklearn.metrics import recall_score
 
 #In the document, I designated n_splits as 100. 
-#But in here I designated it as 5 because tester.ipynb does 1000 folds cross-validation.
+#But in here I designated it as 5 because tester.py does 1000 folds cross-validation.
 #And I changed scoring parameter to scorer for recall_score, not dictionary. 
 #Because I can use multiple evaluation metrics only when sklearn version is 0.19.0 or more.
 sss = StratifiedShuffleSplit(n_splits = 5, test_size = 0.3, random_state = 42)
